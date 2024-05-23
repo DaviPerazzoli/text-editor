@@ -37,14 +37,16 @@ class Text_Editor:
         self.open_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
         self.save_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
 
+        #Creating the side frame for the line count
+        self.side_frame = tk.Frame(self.root, width=20)
+        self.side_frame.pack(side=tk.LEFT)
 
         # Creating the textbox
         TEXTBOX_FONT = ('Arial', 11)
         self.textbox = tk.Text(self.root, font=TEXTBOX_FONT)
         self.textbox.pack(fill=tk.BOTH, expand=True, padx=5, side=tk.RIGHT)
 
-        # self.side_frame = tk.Frame(self.root)
-        # self.side_frame.pack(side=tk.LEFT, width=20)
+        
         #
 
         self.root.mainloop()
