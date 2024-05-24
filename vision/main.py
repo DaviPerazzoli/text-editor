@@ -1,5 +1,6 @@
 from typing import Tuple, Dict, Callable
 import tkinter as tk
+from time import sleep
 
 class Text_Editor:
     def __init__(self):
@@ -25,7 +26,7 @@ class Text_Editor:
 
         # Creating a header to put the action buttons
         self.header = tk.Frame(self.root)
-        self.header.grid(row=0, column=0, columnspan=2)
+        self.header.grid(row=0, column=1, columnspan=2, sticky='nw', padx=(25,0))
 
         # Creating and placing the buttons
         self.new_file_btn = tk.Button(self.header, text='New File')
@@ -37,27 +38,43 @@ class Text_Editor:
         self.open_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
         self.save_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
 
+        #Creating the main frame
+        TEXT_BG_COLOR = '#FFF'
+
+        self.main_frame = tk.Frame(self.root,background=TEXT_BG_COLOR)
+        self.main_frame.grid(row=1,column=1, columnspan=2, sticky='nsew')
+
         #Creating the side frame for the line count
-        self.side_frame = tk.Frame(self.root, background='#FFF')
-        self.side_frame.grid(row=1, column=0, sticky='ns')
+        
+        self.side_frame = tk.Frame(self.main_frame, background=TEXT_BG_COLOR)
+        self.side_frame.grid(row=0, column=0, sticky='ns')
         self.side_frame.columnconfigure(0, weight=1)
         self.side_frame.rowconfigure(0, weight=1)
 
         CODE_FONT = ('consolas', 11)
 
-        self.line_count = tk.Label(self.side_frame, text='', anchor='nw', justify=tk.LEFT, width=3, background='#FFFFFF', font=CODE_FONT)
+        self.line_count = tk.Label(self.side_frame, anchor='nw', justify=tk.LEFT, width=3, background=TEXT_BG_COLOR, font=CODE_FONT)
+        
         self.line_count.grid(row=0,column=0, sticky='n')
 
         # Creating the textbox
         
-        self.textbox = tk.Text(self.root, font=CODE_FONT)
-        self.textbox.grid(row=1,column=1, sticky='nsew')
+        self.textbox = tk.Text(self.main_frame, font=CODE_FONT)
+        self.textbox.grid(row=0,column=1, sticky='nsew')
+
+        self.update_line_count()
 
         self.root.columnconfigure(0,weight=0)
-        self.root.columnconfigure(1,weight=1)
+        self.root.columnconfigure(1,weight=0)
+        self.root.columnconfigure(2,weight=1)
         self.root.rowconfigure(1,weight=1)
+
+        self.main_frame.columnconfigure(0, weight=0)
+        self.main_frame.columnconfigure(1,weight=1)
+
         
-        self.textbox.bind('<KeyRelease>', self.update_line_count)
+        self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
+
         self.root.mainloop()
     
     def get_screen_width(self):
@@ -98,16 +115,20 @@ class Text_Editor:
     def get_texbox_lines(self) -> int:
         return self.textbox.count('1.0',tk.END, 'lines')[0]
     
-    def update_line_count(self, event=None) -> None:
+    def update_line_count(self) -> None:
         line_count_text = ''.join((f'{i}\n' for i in range(1, self.get_texbox_lines() + 1)))
         self.line_count.config(text=line_count_text)
-        # print('key pressed')
-        
+    
+    def handle_textbox_keypress(self, event: tk.Event) -> None:
+        # The line count is updated only if ctrl + key (state == 12) or the keys below are pressed
+        if event.state == 12 or event.keysym in ('BackSpace', 'Return', 'Delete'):
+
+            # The after_idle method calls the parameter function only after doing everything in the mainloop
+            # It is being used to refresh the text widget before updating the line count
+            self.textbox.after_idle(self.update_line_count)
 
     def test(self):
-        # print('hello world')
-        
-        print(self.get_texbox_lines())
+        print('test')
     
 
 def main():
