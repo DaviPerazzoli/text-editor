@@ -38,11 +38,17 @@ class Text_Editor:
         self.open_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
         self.save_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
 
+        # attach Scrollbar to root window at 
+        # the bootom
+
         #Creating the main frame
         TEXT_BG_COLOR = '#FFF'
 
         self.main_frame = tk.Frame(self.root,background=TEXT_BG_COLOR)
         self.main_frame.grid(row=1,column=1, columnspan=2, sticky='nsew')
+
+        #Creating the main frame scrollbar
+        self.main_frame_v_scrollbar = tk.Scrollbar(self.main_frame, orient = tk.VERTICAL)
 
         #Creating the side frame for the line count
         
@@ -59,10 +65,14 @@ class Text_Editor:
 
         # Creating the textbox
         
-        self.textbox = tk.Text(self.main_frame, font=CODE_FONT)
+        self.textbox = tk.Text(self.main_frame, font=CODE_FONT, wrap='none')
         self.textbox.grid(row=0,column=1, sticky='nsew')
-
         self.update_line_count()
+
+        # Creating the textox scrollbar
+        # TODO implement the scrollbars and place them right
+        self.textbox_h_scrollbar = tk.Scrollbar(self.textbox, orient = tk.HORIZONTAL)
+        self.textbox_h_scrollbar.grid(row=1,column=1, sticky='ew')
 
         self.root.columnconfigure(0,weight=0)
         self.root.columnconfigure(1,weight=0)
@@ -71,6 +81,8 @@ class Text_Editor:
 
         self.main_frame.columnconfigure(0, weight=0)
         self.main_frame.columnconfigure(1,weight=1)
+        self.main_frame.columnconfigure(2,weight=0)
+        self.main_frame.rowconfigure(1,weight=0)
 
         
         self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
