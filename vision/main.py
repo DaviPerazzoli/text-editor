@@ -52,7 +52,7 @@ class Text_Editor:
         #Creating a canvas to make the main frame scrollable
 
         self.canvas = tk.Canvas(self.main_frame, background='blue')
-        self.canvas.grid(row=0, column=0, sticky="new")
+        self.canvas.grid(row=0, column=0, sticky="nsew")
 
         self.vertical_scroll_bar = tk.Scrollbar(self.main_frame, orient=tk.VERTICAL, command = self.canvas.yview)
         self.vertical_scroll_bar.grid(row=0, column=1, sticky='ns')
@@ -156,6 +156,7 @@ class Text_Editor:
     def handle_resize(self, event=None):
         self.main_frame.config(width=self.get_screen_width(),height=self.get_screen_height())
         self.canvas.itemconfig(self.frame_id, width = self.get_screen_width())
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def test(self):
         print('test')
