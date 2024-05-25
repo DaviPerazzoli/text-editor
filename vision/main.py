@@ -40,7 +40,7 @@ class Text_Editor:
 
         #*_________________________________________________________________________________________________________________________________
     
-        #Creating the main frame
+        # Creating the main frame
         TEXT_BG_COLOR = '#FFF'
 
         self.main_frame = tk.Frame(self.root, background=TEXT_BG_COLOR)
@@ -49,7 +49,7 @@ class Text_Editor:
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_propagate(False)
 
-        #Creating a canvas to make the main frame scrollable
+        # Creating a canvas to make the main frame scrollable
 
         self.canvas = tk.Canvas(self.main_frame, background='blue')
         self.canvas.grid(row=0, column=0, sticky="nsew")
@@ -67,7 +67,7 @@ class Text_Editor:
 
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
 
-        #Creating the side frame for the line count
+        # Creating the side frame for the line count
         self.side_frame = tk.Frame(self.internal_frame, background=TEXT_BG_COLOR)
         self.side_frame.grid(row=0, column=0, rowspan=2, sticky='ns')
         self.side_frame.grid_columnconfigure(0, weight=1)
@@ -80,7 +80,6 @@ class Text_Editor:
         self.line_count.grid(row=0,column=0, sticky='n')
         
         # Creating the textbox
-        
         self.textbox = tk.Text(self.internal_frame, font=CODE_FONT, wrap='none')
         self.textbox.grid(row=0,column=1, sticky='nsew')
         self.update_textbox_height()
@@ -92,7 +91,7 @@ class Text_Editor:
 
         self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
 
-        #Creating the horizontal textbox scrollbar
+        # Creating the horizontal textbox scrollbar
         self.horizontal_scrollbar = tk.Scrollbar(self.root , orient=tk.HORIZONTAL, command = self.textbox.xview)
         self.horizontal_scrollbar.grid(row=2,column=0, columnspan=2, sticky='we')
 
