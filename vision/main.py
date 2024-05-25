@@ -92,16 +92,20 @@ class Text_Editor:
 
         self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
 
-        #TODO create the textbox horizontal scrollbar
+        #Creating the horizontal textbox scrollbar
+        self.horizontal_scrollbar = tk.Scrollbar(self.root , orient=tk.HORIZONTAL, command = self.textbox.xview)
+        self.horizontal_scrollbar.grid(row=2,column=0, columnspan=2, sticky='we')
+
+        self.textbox.config(xscrollcommand = self.horizontal_scrollbar.set)
+        self.textbox.update_idletasks()
 
         # root grid configuration
-        self.root.columnconfigure(0,weight=0) # Explorer
-        self.root.columnconfigure(1,weight=1) # Main frame
-        self.root.rowconfigure(1,weight=1) # Main frame
+        self.root.grid_columnconfigure(0,weight=0) # Explorer
+        self.root.grid_columnconfigure(1,weight=1) # Main frame
+        self.root.grid_rowconfigure(1,weight=1) # Main frame
 
         # internal frame grid configuration
-        self.internal_frame.columnconfigure(1,weight=1)
-        self.internal_frame.rowconfigure(1,weight=0) # textbox scrollbar
+        self.internal_frame.grid_columnconfigure(1,weight=1)
         
         self.root.mainloop()
     
