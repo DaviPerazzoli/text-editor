@@ -83,6 +83,7 @@ class Text_Editor:
         
         self.textbox = tk.Text(self.internal_frame, font=CODE_FONT, wrap='none')
         self.textbox.grid(row=0,column=1, sticky='nsew')
+        self.update_textbox_height()
         self.update_line_count()
 
         self.root.update()
@@ -90,6 +91,8 @@ class Text_Editor:
         self.root.bind("<Configure>", self.handle_resize)
 
         self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
+
+        #TODO create the textbox horizontal scrollbar
 
         # root grid configuration
         self.root.columnconfigure(0,weight=0) # Explorer
@@ -144,6 +147,10 @@ class Text_Editor:
         line_count_text = ''.join((f'{i}\n' for i in range(1, self.get_texbox_lines() + 1)))
         self.line_count.config(text=line_count_text)
     
+    def update_textbox_height(self) -> None:
+        TEXTBOX_EXTRA_HEIGHT = 10
+        self.textbox.configure(height=self.get_texbox_lines() + TEXTBOX_EXTRA_HEIGHT)
+    
     def handle_textbox_keypress(self, event: tk.Event) -> None:
         # The line count is updated only if ctrl + key (state == 12) or the keys below are pressed
         if event.state == 12 or event.keysym in ('BackSpace', 'Return', 'Delete'):
@@ -151,7 +158,8 @@ class Text_Editor:
             # The after_idle method calls the parameter function only after doing everything in the mainloop
             # It is being used to refresh the text widget before updating the line count
             self.textbox.after_idle(self.update_line_count)
-            self.textbox.configure(height=self.get_texbox_lines())
+            self.textbox.after_idle(self.update_textbox_height)
+            
     
     def handle_resize(self, event=None):
         self.main_frame.config(width=self.get_screen_width(),height=self.get_screen_height())
