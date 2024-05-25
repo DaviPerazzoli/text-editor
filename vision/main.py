@@ -38,17 +38,13 @@ class Text_Editor:
         self.open_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
         self.save_file_btn.pack(side=tk.LEFT, padx=HEADER_BUTTON_PADDING, pady=HEADER_BUTTON_PADDING)
 
-        # attach Scrollbar to root window at 
-        # the bootom
-
+        #*_________________________________________________________________________________________________________________________________
+    
         #Creating the main frame
         TEXT_BG_COLOR = '#FFF'
 
         self.main_frame = tk.Frame(self.root,background=TEXT_BG_COLOR)
         self.main_frame.grid(row=1,column=1, columnspan=2, sticky='nsew')
-
-        #Creating the main frame scrollbar
-        self.main_frame_v_scrollbar = tk.Scrollbar(self.main_frame, orient = tk.VERTICAL)
 
         #Creating the side frame for the line count
         
@@ -62,31 +58,27 @@ class Text_Editor:
         self.line_count = tk.Label(self.side_frame, anchor='nw', justify=tk.LEFT, width=3, background=TEXT_BG_COLOR, font=CODE_FONT)
         
         self.line_count.grid(row=0,column=0, sticky='n')
-
+        
         # Creating the textbox
         
         self.textbox = tk.Text(self.main_frame, font=CODE_FONT, wrap='none')
         self.textbox.grid(row=0,column=1, sticky='nsew')
         self.update_line_count()
 
-        # Creating the textox scrollbar
-        # TODO implement the scrollbars and place them right
-        self.textbox_h_scrollbar = tk.Scrollbar(self.textbox, orient = tk.HORIZONTAL)
-        self.textbox_h_scrollbar.grid(row=1,column=1, sticky='ew')
+        self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
 
-        self.root.columnconfigure(0,weight=0)
-        self.root.columnconfigure(1,weight=0)
-        self.root.columnconfigure(2,weight=1)
-        self.root.rowconfigure(1,weight=1)
+        # root grid configuration
+        self.root.columnconfigure(0,weight=0) # Explorer
+        self.root.columnconfigure(1,weight=1) # Main frame
+        self.root.columnconfigure(2,weight=0) # Vertical scrollbar
+        self.root.rowconfigure(1,weight=1) # Main frame
 
+        # main_frame grid configuration
         self.main_frame.columnconfigure(0, weight=0)
         self.main_frame.columnconfigure(1,weight=1)
         self.main_frame.columnconfigure(2,weight=0)
         self.main_frame.rowconfigure(1,weight=0)
-
         
-        self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
-
         self.root.mainloop()
     
     def get_screen_width(self):
@@ -141,7 +133,6 @@ class Text_Editor:
 
     def test(self):
         print('test')
-    
 
 def main():
     text_editor = Text_Editor()
