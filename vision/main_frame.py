@@ -1,10 +1,11 @@
 import tkinter as tk
-from main import TEXT_BG_COLOR, CODE_FONT
+from style_config import *
 
 class Main_Frame(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent, background=TEXT_BG_COLOR)
 
+        self.parent = parent
         self.grid(row=1,column=1, columnspan=2, sticky='nsew')
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -39,7 +40,7 @@ class Main_Frame(tk.Frame):
         self.internal_frame.update_idletasks()
     
     def define_side_frame(self):
-        self.side_frame = tk.Frame(self.internal_frame, background=self.TEXT_BG_COLOR)
+        self.side_frame = tk.Frame(self.internal_frame, background=TEXT_BG_COLOR)
         self.side_frame.grid(row=0, column=0, rowspan=2, sticky='ns')
         self.side_frame.grid_columnconfigure(0, weight=1)
         self.side_frame.grid_rowconfigure(0, weight=1)
@@ -64,7 +65,7 @@ class Main_Frame(tk.Frame):
         self.textbox.bind('<KeyPress>', self.handle_textbox_keypress)
     
     def define_textbox_scrollbar(self):
-        self.horizontal_scrollbar = tk.Scrollbar(self.root , orient=tk.HORIZONTAL, command = self.textbox.xview)
+        self.horizontal_scrollbar = tk.Scrollbar(self , orient=tk.HORIZONTAL, command = self.textbox.xview)
         self.horizontal_scrollbar.grid(row=2,column=0, columnspan=2, sticky='we')
     
     def get_texbox_lines(self) -> int:
@@ -78,12 +79,14 @@ class Main_Frame(tk.Frame):
         TEXTBOX_EXTRA_HEIGHT = 10
         self.textbox.configure(height=self.get_texbox_lines() + TEXTBOX_EXTRA_HEIGHT)
     
+    def update_textbox(self):
+        self.update_line_count()
+        self.update_textbox_height()
+    
     def handle_textbox_keypress(self, event: tk.Event) -> None:
         # The line count is updated only if ctrl + key (state == 12) or the keys below are pressed
         if event.state == 12 or event.keysym in ('BackSpace', 'Return', 'Delete'):
 
             # The after_idle method calls the parameter function only after doing everything in the mainloop
             # It is being used to refresh the text widget before updating the line count
-            self.textbox.after_idle(self.update_line_count)
-            self.textbox.after_idle(self.update_textbox_height)
-    
+            self.textbox.after_idle(self.update_textbox)

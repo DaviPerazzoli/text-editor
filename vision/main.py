@@ -2,14 +2,10 @@ from typing import Tuple, Dict, Callable
 import tkinter as tk
 from header import Header_Frame
 from main_frame import Main_Frame
-
-TEXT_BG_COLOR = '#FFF'
-CODE_FONT = ('consolas', 11)
+from style_config import *
 
 class Text_Editor:
     def __init__(self):
-        
-
         self.root = tk.Tk()
         self.root.title('Text Editor')
 
@@ -17,8 +13,9 @@ class Text_Editor:
         
         self.define_menus()
         
-        self.header = Header_Frame(self.root)
+        
         self.main_frame = Main_Frame(self.root)
+        self.header = Header_Frame(self.root, self.main_frame)
 
         self.root.update()
         self.handle_resize()
@@ -88,8 +85,11 @@ class Text_Editor:
         
     def handle_resize(self, event=None) -> None:
         self.main_frame.config(width=self.get_screen_width(),height=self.get_screen_height())
-        self.main_frame.canvas.itemconfig(self.frame_id, width = self.get_screen_width())
-        self.main_frame.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        self.main_frame.canvas.config(width=self.main_frame.winfo_width())
+        self.main_frame.canvas.itemconfig(self.main_frame.frame_id, width = self.get_screen_width())
+        self.main_frame.canvas.configure(scrollregion=self.main_frame.canvas.bbox("all"))
+    
+   
 
     def test(self):
         print('test')
