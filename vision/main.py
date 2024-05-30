@@ -15,9 +15,9 @@ class Text_Editor:
         self.define_menus()
         
         
-        self.main_frame = Main_Frame(self.root)
-        self.navbar = Navbar(self.root)
-        self.header = Header_Frame(self.root, self.main_frame)
+        self.main_frame = Main_Frame(self.root, self)
+        self.navbar = Navbar(self.root, self)
+        self.header = Header_Frame(self.root, self)
 
         self.root.update()
         self.handle_resize()
@@ -114,7 +114,7 @@ class Text_Editor:
             return False
 
     def test(self):
-        self.header.save_file("vision/teste.txt")
+        self.header.save_file('C:/Users/Tufic/Desktop/CURSOS/text-editor/vision/teste.txt')
         print('test')
 
 def main():

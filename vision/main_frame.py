@@ -2,11 +2,11 @@ import tkinter as tk
 from style_config import *
 
 class Main_Frame(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, app):
         super().__init__(parent, background=TEXT_BG_COLOR)
 
         self.parent = parent
-        self.grid(row=1,column=1, columnspan=2, sticky='nsew')
+        self.grid(row=2,column=1, columnspan=2, sticky='nsew')
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_propagate(False)
