@@ -2,6 +2,7 @@ from typing import Tuple, Dict, Callable
 import tkinter as tk
 from header import Header_Frame
 from main_frame import Main_Frame
+from navbar import Navbar, Tab
 from style_config import *
 
 class Text_Editor:
@@ -15,6 +16,7 @@ class Text_Editor:
         
         
         self.main_frame = Main_Frame(self.root)
+        self.navbar = Navbar(self.root)
         self.header = Header_Frame(self.root, self.main_frame)
 
         self.root.update()
@@ -26,7 +28,8 @@ class Text_Editor:
         self.root.grid_columnconfigure(1,weight=1) # Main frame and header
 
         self.root.grid_rowconfigure(0,weight=0) # Header and explorer
-        self.root.grid_rowconfigure(1,weight=1) # Main frame and explorer
+        self.root.grid_rowconfigure(1,weight=0) # Main frame and explorer
+        self.root.grid_rowconfigure(2,weight=1) # Main frame and explorer
 
         self.root.mainloop()
     
@@ -89,9 +92,29 @@ class Text_Editor:
         self.main_frame.canvas.itemconfig(self.main_frame.frame_id, width = self.get_screen_width())
         self.main_frame.canvas.configure(scrollregion=self.main_frame.canvas.bbox("all"))
     
-   
+    def read_file(self, file_path) -> str or None:
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                content  = file.read()
+            return content
+        except FileNotFoundError:
+            print('Error: File not found')
+        except Exception:
+            print(Exception)
+
+    def save_text_to_file(self, file_path: str) -> bool:
+        textbox_content: str = self.main_frame.textbox.get('1.0', tk.END)
+
+        try:
+            with open(file_path, 'w') as file:
+                file.write(textbox_content)
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
     def test(self):
+        self.header.save_file("vision/teste.txt")
         print('test')
 
 def main():
