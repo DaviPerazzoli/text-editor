@@ -31,6 +31,8 @@ class Text_Editor:
         self.root.grid_rowconfigure(1,weight=0) # Main frame and explorer
         self.root.grid_rowconfigure(2,weight=1) # Main frame and explorer
 
+        self.current_file: str = ''
+
         self.root.mainloop()
     
     def get_screen_width(self) -> int:
@@ -92,22 +94,31 @@ class Text_Editor:
         self.main_frame.canvas.itemconfig(self.main_frame.frame_id, width = self.get_screen_width())
         self.main_frame.canvas.configure(scrollregion=self.main_frame.canvas.bbox("all"))
     
-    def read_file(self, file_path) -> str or None:
+    def read_file(self, file_path) -> str:
         try:
             with open(file_path, 'r', encoding='utf-8') as file:
                 content  = file.read()
             return content
         except FileNotFoundError:
             print('Error: File not found')
+            return ''
         except Exception:
             print(Exception)
+            return ''
 
-    def save_text_to_file(self, file_path: str) -> bool:
-        textbox_content: str = self.main_frame.textbox.get('1.0', tk.END)
-
+    def save_text_to_file(self, file_path: str, content) -> bool:
         try:
             with open(file_path, 'w') as file:
-                file.write(textbox_content)
+                file.write(content)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def save_file_as(self, file_path: str, content) -> bool:
+        try:
+            with open(file_path, 'x') as file:
+                file.write(content)
             return True
         except Exception as e:
             print(e)

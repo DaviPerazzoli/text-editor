@@ -4,13 +4,12 @@ from tkinter import filedialog
 class Header_Frame(tk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
+        self.app = app
         self.main_frame = app.main_frame
         self.grid(row=0, column=1, columnspan=2, sticky='nw', padx=(25,0))
 
         self.define_buttons(button_padding=5)
 
-        
-    
     def define_buttons(self, button_padding: int) -> None:
         self.new_file_btn = tk.Button(self, text='New File')
         self.open_file_btn = tk.Button(self, text='Open File', command=self.handle_open_file_btn_click)
@@ -28,10 +27,18 @@ class Header_Frame(tk.Frame):
                 ('Text', '*.txt')
                 ])
         if file_path:
-            file_content = self.parent.read_file(file_path)
+            file_content = self.app.read_file(file_path)
             self.main_frame.textbox.delete('1.0', tk.END)
             self.main_frame.textbox.insert(tk.END, file_content)
             self.main_frame.update_textbox()
+            self.app.current_file = file_path
     
-    def handle_save_file_btn_click(self):
-        raise NotImplementedError()
+    def handle_save_file_btn_click(self, event=None):
+        #TODO resolver essa parte de salvar
+        textbox_content: str = self.main_frame.textbox.get('1.0', tk.END)
+
+        if self.app.current_file == '':
+            with filedialog.asksaveasfile(mode='w') as file:
+                file.write(textbox_content)
+        else:
+            self.app.save_text_to_file(filedialog.askopenfilename())
