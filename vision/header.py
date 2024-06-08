@@ -30,7 +30,7 @@ class Header_Frame(tk.Frame):
             self.app.handle_new_opened_file(file_path)
     
     def handle_save_file_btn_click(self, event=None):
-        textbox_content: str = self.main_frame.textbox.get('1.0', tk.END)
+        textbox_content: str = self.main_frame.textbox.get('1.0', tk.END)[0:-1]
 
         if self.app.current_file == '':
             file = filedialog.asksaveasfile(mode='w')

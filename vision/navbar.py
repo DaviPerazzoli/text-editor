@@ -64,6 +64,7 @@ class Tab (tk.Frame):
         self.parent.app.set_textbox_text(self.text)
         self.parent.set_all_tab_colors(TAB_BG_COLOR)
         self.file_label.configure(bg=SELECTED_TAB_BG_COLOR)
+        self.configure(bg=SELECTED_TAB_BG_COLOR)
     
     def uptade_text(self):
         self.text: str = self.parent.app.read_file(self.file)

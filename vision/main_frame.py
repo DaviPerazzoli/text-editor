@@ -14,7 +14,7 @@ class Main_Frame(tk.Frame):
         self.define_canvas()
     
     def define_canvas(self):
-        self.canvas = tk.Canvas(self, background=TEXT_BG_COLOR)
+        self.canvas = tk.Canvas(self, background=TEXT_BG_COLOR, highlightthickness=0, borderwidth=0)
         self.canvas.grid(row=0, column=0, sticky="nsew")
 
         self.define_vertical_scrollbar()
