@@ -12,16 +12,22 @@ class Navbar(tk.Frame):
 
         self.tabs: List[Tab] = []
 
-        self.new_tab('C:/Users/Tufic/Desktop/CURSOS/text-editor/vision/teste.txt')
+        # self.new_tab('C:/Users/Tufic/Desktop/CURSOS/text-editor/vision/teste.txt')
 
     def update_navbar(self):
+        count=0
         for tab in self.tabs:
-            tab.pack(side=tk.LEFT)
+            tab.grid(column=count, row=0, sticky='nsw')
+            count += 1
     
     def new_tab(self, file):
         tab = Tab(self, file)
         self.tabs.append(tab)
-        self.app.current_file = tab.file
+        self.app.set_current_file(tab.file)
+    
+    def set_all_tab_colors(self, color: str):
+        for tab in self.tabs:
+            tab.file_label.configure(bg=color)
 
 class Tab (tk.Frame):
     def __init__(self, parent, file: str):
@@ -38,12 +44,12 @@ class Tab (tk.Frame):
 
         self.parent = parent
 
-        self.file_label = tk.Label(self, text=self.file_name, font=CODE_FONT, bg='blue')
+        self.file_label = tk.Label(self, text=self.file_name, font=CODE_FONT)
         self.file_label.pack(side=tk.LEFT)
 
         self.close_button = tk.Button(self, text='X')
         self.close_button.pack(side=tk.RIGHT)
-        self.pack(side=tk.LEFT, padx=5, pady=5)
+        self.grid(column = len(self.parent.tabs), row=0, sticky='nsw')
 
         self.main_frame = self.parent.main_frame
         
@@ -56,9 +62,16 @@ class Tab (tk.Frame):
         self.parent.app.set_current_file(self.file)
         self.uptade_text()
         self.parent.app.set_textbox_text(self.text)
+        self.parent.set_all_tab_colors(TAB_BG_COLOR)
+        self.file_label.configure(bg=SELECTED_TAB_BG_COLOR)
     
     def uptade_text(self):
         self.text: str = self.parent.app.read_file(self.file)
 
     def close_tab(self, event):
         self.destroy()
+        tab_index = self.parent.tabs.index(self)
+        if tab_index > 0:
+            self.parent.tabs[tab_index-1].handle_click()
+        self.parent.tabs.remove(self)
+        self.parent.update_navbar()

@@ -27,11 +27,7 @@ class Header_Frame(tk.Frame):
                 ('Text', '*.txt')
                 ])
         if file_path:
-            file_content = self.app.read_file(file_path)
-            self.main_frame.textbox.delete('1.0', tk.END)
-            self.main_frame.textbox.insert(tk.END, file_content)
-            self.main_frame.update_textbox()
-            self.app.current_file = file_path
+            self.app.handle_new_opened_file(file_path)
     
     def handle_save_file_btn_click(self, event=None):
         textbox_content: str = self.main_frame.textbox.get('1.0', tk.END)

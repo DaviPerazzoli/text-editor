@@ -18,8 +18,8 @@ class Text_Editor:
         
         
         self.main_frame = Main_Frame(self.root, self)
-        self.header = Header_Frame(self.root, self)
         self.navbar = Navbar(self.root, self)
+        self.header = Header_Frame(self.root, self)
 
         self.root.update()
         self.handle_resize()
@@ -102,7 +102,11 @@ class Text_Editor:
         except FileNotFoundError:
             print('Error: File not found')
             return ''
+        except UnicodeDecodeError:
+            tk.messagebox.showinfo(title="Decode Error", message='This file uses an unsuported text encoding')
+            return ''
         except Exception as e:
+            print(e.__class__)
             print(e)
             return ''
 
@@ -128,13 +132,23 @@ class Text_Editor:
         self.main_frame.textbox.delete('1.0', tk.END)
         self.main_frame.textbox.insert(tk.END, text)
         self.main_frame.update_textbox()
-    
+
     def set_current_file(self, file: str):
         self.current_file = file
+    
+    def handle_new_opened_file(self, file: str):
+        self.set_current_file(file)
+        tab_is_opened = False
+        for tab in self.navbar.tabs:
+            if tab.file == file:
+                tab.handle_click()
+                tab_is_opened = True
+        
+        if not tab_is_opened:
+            self.navbar.new_tab(file)
 
     def test(self):
         print('test')
-        self.header.save_file('C:/Users/Tufic/Desktop/CURSOS/text-editor/vision/teste.txt')
     
 
 def main():

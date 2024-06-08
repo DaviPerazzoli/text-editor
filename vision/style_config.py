@@ -1,2 +1,4 @@
 TEXT_BG_COLOR = '#FFF'
 CODE_FONT = ('consolas', 11)
+TAB_BG_COLOR = '#EEE'
+SELECTED_TAB_BG_COLOR = '#FFF'
