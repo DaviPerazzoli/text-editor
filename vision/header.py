@@ -34,11 +34,10 @@ class Header_Frame(tk.Frame):
             self.app.current_file = file_path
     
     def handle_save_file_btn_click(self, event=None):
-        #TODO resolver essa parte de salvar
         textbox_content: str = self.main_frame.textbox.get('1.0', tk.END)
 
         if self.app.current_file == '':
-            with filedialog.asksaveasfile(mode='w') as file:
-                file.write(textbox_content)
+            file = filedialog.asksaveasfile(mode='w')
+            file.write(textbox_content)
         else:
-            self.app.save_text_to_file(filedialog.askopenfilename())
+            self.app.save_text_to_file(self.app.current_file, textbox_content)

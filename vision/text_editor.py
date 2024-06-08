@@ -8,6 +8,8 @@ from style_config import *
 class Text_Editor:
     def __init__(self):
         self.root = tk.Tk()
+        self.current_file: str = ''
+
         self.root.title('Text Editor')
 
         self.define_geometry()
@@ -16,8 +18,8 @@ class Text_Editor:
         
         
         self.main_frame = Main_Frame(self.root, self)
-        self.navbar = Navbar(self.root, self)
         self.header = Header_Frame(self.root, self)
+        self.navbar = Navbar(self.root, self)
 
         self.root.update()
         self.handle_resize()
@@ -30,8 +32,6 @@ class Text_Editor:
         self.root.grid_rowconfigure(0,weight=0) # Header and explorer
         self.root.grid_rowconfigure(1,weight=0) # Main frame and explorer
         self.root.grid_rowconfigure(2,weight=1) # Main frame and explorer
-
-        self.current_file: str = ''
 
         self.root.mainloop()
     
@@ -102,8 +102,8 @@ class Text_Editor:
         except FileNotFoundError:
             print('Error: File not found')
             return ''
-        except Exception:
-            print(Exception)
+        except Exception as e:
+            print(e)
             return ''
 
     def save_text_to_file(self, file_path: str, content) -> bool:
@@ -115,7 +115,7 @@ class Text_Editor:
             print(e)
             return False
 
-    def save_file_as(self, file_path: str, content) -> bool:
+    def save_file_as(self, file_path: str, content: str) -> bool:
         try:
             with open(file_path, 'x') as file:
                 file.write(content)
@@ -123,10 +123,19 @@ class Text_Editor:
         except Exception as e:
             print(e)
             return False
+    
+    def set_textbox_text(self, text: str):
+        self.main_frame.textbox.delete('1.0', tk.END)
+        self.main_frame.textbox.insert(tk.END, text)
+        self.main_frame.update_textbox()
+    
+    def set_current_file(self, file: str):
+        self.current_file = file
 
     def test(self):
-        self.header.save_file('C:/Users/Tufic/Desktop/CURSOS/text-editor/vision/teste.txt')
         print('test')
+        self.header.save_file('C:/Users/Tufic/Desktop/CURSOS/text-editor/vision/teste.txt')
+    
 
 def main():
     text_editor = Text_Editor()

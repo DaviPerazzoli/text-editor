@@ -18,19 +18,22 @@ class Navbar(tk.Frame):
         for tab in self.tabs:
             tab.pack(side=tk.LEFT)
     
-    def new_tab(self, file=''):
+    def new_tab(self, file):
         tab = Tab(self, file)
         self.tabs.append(tab)
-        self.app.current_file = file
+        self.app.current_file = tab.file
 
 class Tab (tk.Frame):
-    def __init__(self, parent, file=''):
+    def __init__(self, parent, file: str):
         
         self.file = file
+        self.text = ''
+
         try:
             self.file_name = file.split('/')[-1]
         except IndexError:
             self.file_name = 'New file'
+        
         super().__init__(parent)
 
         self.parent = parent
@@ -43,18 +46,19 @@ class Tab (tk.Frame):
         self.pack(side=tk.LEFT, padx=5, pady=5)
 
         self.main_frame = self.parent.main_frame
-        self.text: str = self.parent.app.read_file(self.file)
+        
         self.handle_click()
 
         self.file_label.bind('<Button-1>', self.handle_click)
         self.close_button.bind('<Button-1>', self.close_tab)
     
-    def handle_click(self, event=None) -> None:
-        self.parent.app.current_file = self.file
-        
-        self.main_frame.textbox.delete('1.0', tk.END)
-        self.main_frame.textbox.insert(tk.END, self.text)
-        self.main_frame.update_textbox()
+    def handle_click(self, event = None) -> None:
+        self.parent.app.set_current_file(self.file)
+        self.uptade_text()
+        self.parent.app.set_textbox_text(self.text)
     
+    def uptade_text(self):
+        self.text: str = self.parent.app.read_file(self.file)
+
     def close_tab(self, event):
         self.destroy()
