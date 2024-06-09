@@ -1,9 +1,9 @@
 from typing import Tuple, Dict, Callable
 import tkinter as tk
-from header import Header_Frame
-from main_frame import Main_Frame
-from navbar import Navbar, Tab
-from style_config import *
+from vision.header import Header_Frame
+from vision.main_frame import Main_Frame
+from vision.navbar import Navbar, Tab
+from vision.style_config import *
 
 class Text_Editor:
     def __init__(self):
@@ -100,7 +100,7 @@ class Text_Editor:
                 content  = file.read()
             return content
         except FileNotFoundError:
-            print('Error: File not found')
+            print('Creating new file...')
             return ''
         except UnicodeDecodeError:
             tk.messagebox.showinfo(title="Decode Error", message='This file uses an unsuported text encoding')
@@ -151,8 +151,8 @@ class Text_Editor:
         print('test')
     
 
-def main():
-    text_editor = Text_Editor()
+# def main():
+#     text_editor = Text_Editor()
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

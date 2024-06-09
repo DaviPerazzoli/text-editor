@@ -1,6 +1,6 @@
 import tkinter as tk
 from typing import List
-from style_config import *
+from vision.style_config import *
 
 class Navbar(tk.Frame):
     def __init__(self, parent, app):
@@ -11,6 +11,7 @@ class Navbar(tk.Frame):
         self.main_frame = app.main_frame
 
         self.tabs: List[Tab] = []
+        self.active_tab = None
 
         # self.new_tab('C:/Users/Tufic/Desktop/CURSOS/text-editor/vision/teste.txt')
 
@@ -28,6 +29,9 @@ class Navbar(tk.Frame):
     def set_all_tab_colors(self, color: str):
         for tab in self.tabs:
             tab.file_label.configure(bg=color)
+    
+    def set_active_tab(self, tab):
+        self.active_tab = tab
 
 class Tab (tk.Frame):
     def __init__(self, parent, file: str):
@@ -35,10 +39,11 @@ class Tab (tk.Frame):
         self.file = file
         self.text = ''
 
-        try:
-            self.file_name = file.split('/')[-1]
-        except IndexError:
+        if self.file == '':
             self.file_name = 'New file'
+        else:
+            self.file_name = file.split('/')[-1]
+        
         
         super().__init__(parent)
 
@@ -65,14 +70,23 @@ class Tab (tk.Frame):
         self.parent.set_all_tab_colors(TAB_BG_COLOR)
         self.file_label.configure(bg=SELECTED_TAB_BG_COLOR)
         self.configure(bg=SELECTED_TAB_BG_COLOR)
+        self.parent.set_active_tab(self)
     
     def uptade_text(self):
         self.text: str = self.parent.app.read_file(self.file)
+    
+    def update_file(self, file):
+        self.file = file
+        self.file_name = file.split('/')[-1]
+        self.file_label.configure(text=self.file_name)
 
     def close_tab(self, event):
         self.destroy()
         tab_index = self.parent.tabs.index(self)
         if tab_index > 0:
             self.parent.tabs[tab_index-1].handle_click()
+        else:
+            self.parent.app.set_textbox_text('')
+            self.parent.app.set_current_file('')
         self.parent.tabs.remove(self)
         self.parent.update_navbar()

@@ -1,5 +1,5 @@
 import tkinter as tk
-from style_config import *
+from vision.style_config import *
 
 class Main_Frame(tk.Frame):
     def __init__(self, parent, app):
