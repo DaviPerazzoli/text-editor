@@ -14,12 +14,11 @@ class Text_Editor:
 
         self.define_geometry()
         
-        self.define_menus()
-        
-        
         self.main_frame = Main_Frame(self.root, self)
         self.navbar = Navbar(self.root, self)
         self.header = Header_Frame(self.root, self)
+
+        self.define_menus()
 
         self.root.update()
         self.handle_resize()
@@ -51,11 +50,13 @@ class Text_Editor:
     def define_menus(self) -> None:
         self.menubar = self.new_menu(self.root)
 
-        self.testmenu = self.new_menu(self.menubar, options={
-            'Hello': self.test
+        self.filemenu = self.new_menu(self.menubar, options={
+            'New File': self.header.handle_new_file_btn_click,
+            'Open file': self.header.handle_open_file_btn_click,
+            'Save file': self.header.handle_save_file_btn_click
         })
 
-        self.menubar.add_cascade(menu=self.testmenu, label="Test")
+        self.menubar.add_cascade(menu=self.filemenu, label="File")
 
         self.root.config(menu=self.menubar)
     
