@@ -150,10 +150,3 @@ class Text_Editor:
 
     def test(self):
         print('test')
-    
-
-# def main():
-#     text_editor = Text_Editor()
-
-# if __name__ == '__main__':
-#     main()
