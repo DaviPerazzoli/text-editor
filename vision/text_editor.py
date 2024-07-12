@@ -101,7 +101,6 @@ class Text_Editor:
                 content  = file.read()
             return content
         except FileNotFoundError:
-            print('Creating new file...')
             return ''
         except UnicodeDecodeError:
             tk.messagebox.showinfo(title="Decode Error", message='This file uses an unsuported text encoding')
